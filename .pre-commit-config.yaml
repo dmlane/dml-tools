@@ -1,0 +1,11 @@
+fail_fast: true
+repos:
+- repo: local
+  hooks:
+    - id: pre-commit.sh
+      name: pre-commit.sh
+      entry: .common/bin/pre_commit.sh
+      language: script
+      pass_filenames: false
+
+
