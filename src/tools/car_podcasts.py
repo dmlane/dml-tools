@@ -125,7 +125,7 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
                 break
 
             os.rename(temp_copy, dest_file)
-            # os.remove(original_file)
+            os.remove(original_file)
             num_files += 1
             print(f"- successfully copied{Ansi.NC}")
         total_time = (self.hours_per_batch * 3600) - remaining_seconds
@@ -138,13 +138,6 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
             f"to {self.dest_dir} (Duration"
             f" {Ansi.YELLOW}{hours:02d}:{minutes:02d}:{seconds:02d}){Ansi.NC}"
         )
-
-    # def main(self):
-    #     """Main entry point"""
-    #     self.make_cmd_line_parser()
-    #     self.parse_args()
-    #     self.read_config()
-    #     self.fetch_files()
 
 
 def main():
