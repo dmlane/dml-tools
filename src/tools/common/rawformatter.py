@@ -5,7 +5,7 @@ import textwrap
 
 
 class RawFormatter(argparse.HelpFormatter):
-    """Help formatter"""
+    """Help formatter to split the text on newlines and indent each line"""
 
     def _fill_text(self, text, width, indent):
         """Split the text on newlines and indent each line"""

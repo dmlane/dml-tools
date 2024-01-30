@@ -12,8 +12,9 @@ EXPECTED_CONFIG_DICT = {
     "batch_hours": "987",
     "dest": f"{HOME}/DIR_DEST",
     "dropbox": "/Users/dave/Library/CloudStorage/Dropbox",
+    "extra": "ignore",
+    "quarantine": f"{HOME}/Work/Podcasts4IOS.quarantine",
     "source": f"{HOME}/Library/CloudStorage/Dropbox/DIR_SOURCE",
-    "extra": '"ignore"',
 }
 
 

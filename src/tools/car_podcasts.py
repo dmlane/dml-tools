@@ -2,15 +2,27 @@
 """ Fetches X hours of podcasts from source into local directory """
 
 import argparse
+import glob
+import os
+import shutil
 from importlib.metadata import version
 
-from . import RawFormatter
+import eyed3
+
+from tools import Ansi, RawFormatter, read_config
+
+LINE_LENGTH = os.get_terminal_size()[0]
 
 
 class CarPodcasts:  # pylint: disable=too-few-public-methods
     """Class to fetch podcasts from dropbox folder into local directory"""
 
     parser = None
+    verbose = False
+    hours_per_batch = -1
+    quarantine_dir = None
+    source_dir = None
+    dest_dir = None
 
     def __init__(self):
         pass
@@ -31,64 +43,110 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
             version=version("dml-tools"),
             help="Print the version number",
         )
-        self.parser.add_argument("mp3_file", required=True)
+        self.parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            default=False,
+            help="Verbose output",
+        )
+        self.parser.add_argument(
+            "-H",
+            "--hours-per-batch",
+            type=int,
+            default=-1,
+            help="Hours of podcasts to fetch",
+        )
+
+    def parse_args(self):
+        """Parse the command line arguments"""
+        args = self.parser.parse_args()
+
+        self.verbose = args.verbose
+        self.hours_per_batch = args.hours_per_batch
+
+    def read_config(self):
+        """Read the config file"""
+        config = read_config("podcasts")
+        if self.hours_per_batch == -1:
+            self.hours_per_batch = int(config["batch_hours"])
+        self.source_dir = config["source"]
+        self.dest_dir = config["dest"]
+        self.quarantine_dir = config["quarantine"]
+
+    def get_sorted_eligible_files(self):
+        """Return a list of files in date order that are eligible for processing"""
+        eligible = glob.glob(f"{self.source_dir}/*/*.mp3")
+        eligible.sort(key=os.path.basename)
+        return eligible
+
+    def fetch_files(self):
+        """Fetch the files up to the specified hours of podcasts"""
+        print(f"Fetching {self.hours_per_batch} hours of podcasts -----------")
+        remaining_seconds = self.hours_per_batch * 3600
+        eligible = self.get_sorted_eligible_files()
+        temp_copy = os.path.join(self.dest_dir, "temp_copy.mp3")
+        num_files = 0
+        os.makedirs(self.dest_dir, exist_ok=True)
+        os.makedirs(self.quarantine_dir, exist_ok=True)
+
+        # Raise eyed3 logging errors to avoid spamming the console
+        # Examples of messages suppressed are:-
+        #       Lame tag CRC check failed
+        #       Invalid date: 2023-06-13T02:24:07.000Z
+        eyed3.log.setLevel("ERROR")
+
+        for original_file in eligible:
+            short_name = original_file.replace(self.source_dir, "")[1:]
+            if len(short_name) > LINE_LENGTH:
+                display_name = short_name[: LINE_LENGTH - 4] + "...."
+            else:
+                display_name = short_name
+            # Give the user something to see while we're doing a slow fetch
+            print(f"{Ansi.LIGHT_GREY}{display_name}", end="\r")
+            shutil.copyfile(original_file, temp_copy)
+            mp3_file = eyed3.load(temp_copy)
+            print(f"{Ansi.CLEAR_EOL}")
+            if not mp3_file:
+                print(f"{Ansi.RED}****{display_name}****\n - moving it to quarantine", end="")
+                dest_file = os.path.join(self.quarantine_dir, os.path.basename(original_file))
+                run_length = 0
+            else:
+                dest_file = os.path.join(self.dest_dir, os.path.basename(original_file))
+                run_length = int(mp3_file.info.time_secs)
+                print(
+                    f"{Ansi.GREEN}{display_name}\n    with length of {run_length} seconds ", end=""
+                )
+            remaining_seconds -= run_length
+            if remaining_seconds <= 0:
+                os.remove(temp_copy)
+                print(f"{Ansi.YELLOW}- exceeds the batch limit{Ansi.NC}")
+                remaining_seconds += run_length
+                break
+
+            os.rename(temp_copy, dest_file)
+            # os.remove(original_file)
+            num_files += 1
+            print(f"- successfully copied{Ansi.NC}")
+        total_time = (self.hours_per_batch * 3600) - remaining_seconds
+        hours = int(total_time / 3600)
+        minutes = int((total_time % 3600) / 60)
+        seconds = int((total_time % 3600) % 60)
+
+        print(
+            f"{Ansi.GREEN}I have added {Ansi.YELLOW}{num_files} files{Ansi.GREEN} "
+            f"to {self.dest_dir} (Duration"
+            f" {Ansi.YELLOW}{hours:02d}:{minutes:02d}:{seconds:02d}){Ansi.NC}"
+        )
+
+    def main(self):
+        """Main entry point"""
+        self.make_cmd_line_parser()
+        self.parse_args()
+        self.read_config()
+        self.fetch_files()
 
 
-# logger = get_logger("podcasts.log", logging.INFO)
-# logger.info("Start of car_podcasts run")
-#
-# POD_SOURCE = os.path.expanduser("~/Library/CloudStorage/Dropbox/OnDemand/Podcasts/mp3")
-# POD_DEST = os.path.expanduser("~/Work/Podcasts4IOS")
-# POD_BATCH_HOURS = 12
-#
-#
-# class CustomError(Exception):
-#     """Custom exception"""
-#
-#
-# def main():
-#     """Main entry point"""
-#     try:
-#         # source_dir = config.POD_SOURCE
-#         source_dir = POD_SOURCE
-#         if not os.path.isdir(source_dir):
-#             raise CustomError(f"Directory {source_dir} does not exist")
-#         # dest_dir = config.POD_DEST
-#         dest_dir = POD_DEST
-#
-#         if not os.path.isdir(dest_dir):
-#             os.makedirs(dest_dir)
-#         # Total time of podcasts to be processed
-#         # batch_seconds = int(config.POD_BATCH_HOURS) * 3600
-#         batch_seconds = POD_BATCH_HOURS * 3600
-#         # Get a list of eligible files
-#         prefix_length = len(source_dir) + 1
-#         eligible = glob.glob(f"{source_dir}/*/*.mp3")
-#         eligible.sort(key=os.path.basename)
-#
-#         total_duration = 0
-#         for file_name in eligible:
-#             # Force file to be local (won't work while Dropbox not updated)
-#             dest_file = dest_dir + "/" + os.path.basename(file_name)
-#
-#             shutil.copy(file_name, dest_file)
-#             #
-#             duration = eyed3.load(dest_file).info.time_secs
-#             total_duration += duration
-#             if total_duration >= batch_seconds:
-#                 os.remove(dest_file)
-#                 break
-#             logger.info("Added file %s", file_name[prefix_length:])
-#             os.remove(file_name)
-#
-#     except Exception as inst:  # pylint: disable=broad-except
-#         field = inst.args
-#         logger.critical(field)
-#         logger.critical(traceback.format_exc())
-#         logger.critical("Aborting ??????????")
-#
-#     logger.info("End of run ++++++++++")
-#
-#
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    car_podcasts = CarPodcasts()
+    car_podcasts.main()
