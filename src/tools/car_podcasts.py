@@ -139,14 +139,18 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
             f" {Ansi.YELLOW}{hours:02d}:{minutes:02d}:{seconds:02d}){Ansi.NC}"
         )
 
-    def main(self):
-        """Main entry point"""
-        self.make_cmd_line_parser()
-        self.parse_args()
-        self.read_config()
-        self.fetch_files()
+    # def main(self):
+    #     """Main entry point"""
+    #     self.make_cmd_line_parser()
+    #     self.parse_args()
+    #     self.read_config()
+    #     self.fetch_files()
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point"""
     car_podcasts = CarPodcasts()
-    car_podcasts.main()
+    car_podcasts.make_cmd_line_parser()
+    car_podcasts.parse_args()
+    car_podcasts.read_config()
+    car_podcasts.fetch_files()

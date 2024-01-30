@@ -43,9 +43,9 @@ pytest-resource-path = "^1.3.0"
 setuptools = "^68.2.2"
 mock = "^5.1.0"
 
-#[tool.poetry.scripts]
+[tool.poetry.scripts]
 # Section managed with vi
-#car_podcasts = "tools.car_podcasts:CarPodcasts.main"
+car_podcasts = "tools.car_podcasts:main"
 
 [[tool.poetry.source]]
 name = "repositories.fury"
