@@ -80,7 +80,7 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
         eligible.sort(key=os.path.basename)
         return eligible
 
-    def fetch_files(self):
+    def fetch_files(self):  # pylint: disable=too-many-locals
         """Fetch the files up to the specified hours of podcasts"""
         print(f"Fetching {self.hours_per_batch} hours of podcasts -----------")
         remaining_seconds = self.hours_per_batch * 3600
@@ -94,7 +94,10 @@ class CarPodcasts:  # pylint: disable=too-few-public-methods
         # Examples of messages suppressed are:-
         #       Lame tag CRC check failed
         #       Invalid date: 2023-06-13T02:24:07.000Z
-        eyed3.log.setLevel("ERROR")
+        error_level = "ERROR"
+        if self.verbose:
+            error_level = "WARNING"
+        eyed3.log.setLevel(error_level)
 
         for original_file in eligible:
             short_name = original_file.replace(self.source_dir, "")[1:]
