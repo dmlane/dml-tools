@@ -45,7 +45,7 @@ mock = "^5.1.0"
 
 [tool.poetry.scripts]
 # Section managed with vi
-car_podcasts = "dml-tools.car_podcasts:main"
+car_podcasts = "tools.car_podcasts:main"
 
 [[tool.poetry.source]]
 name = "repositories.fury"
