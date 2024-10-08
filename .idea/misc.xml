@@ -5,5 +5,5 @@
     <option name="pathToExecutable" value="$USER_HOME$/.pyenv/shims/black" />
     <option name="sdkName" value="Python 3.11 (dml-tools)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (dml-tools)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (dml-tools)" project-jdk-type="Python SDK" />
 </project>
