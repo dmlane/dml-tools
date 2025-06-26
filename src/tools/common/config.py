@@ -1,12 +1,10 @@
-""" Read config file"""
+"""Read config file"""
 
 import os
 import shutil
 from configparser import BasicInterpolation, ConfigParser
 
 import appdirs
-
-from tools.common.utils import get_dropbox_folder_location
 
 # Config file provided as part of the package
 DEFAULT_CONFIG_FILE = os.path.join(
@@ -18,9 +16,9 @@ CONFIG_DIR = appdirs.user_config_dir("net.dmlane")
 CONFIG = os.path.join(CONFIG_DIR, "tools.ini")
 
 # These will be used by ConfigParser to expand variables in the ini file
-VARS = {
-    "DROPBOX": get_dropbox_folder_location(),
-}
+# VARS = {
+#     "DROPBOX": get_dropbox_folder_location(),
+# }
 
 
 class EnvInterpolation(BasicInterpolation):  # pylint: disable=too-few-public-methods
@@ -47,7 +45,7 @@ def read_config(section, ini_path=CONFIG):
             raise FileNotFoundError(ini_path)
     config = ConfigParser(
         interpolation=EnvInterpolation(),
-        defaults=VARS,
+        # defaults=VARS,
     )
     # We need to read the default config file first in case sections or fields have been
     # added to the default config file.
