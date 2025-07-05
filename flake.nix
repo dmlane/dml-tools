@@ -16,7 +16,7 @@
           pname = "dml-tools";
           version = "2025.07.05";
           src = ./.;
-          sourceRoot = "src";
+          #sourceRoot = "src";
           pyproject = true;
           nativeBuildInputs = [ pkgs.hatch ];
           propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
