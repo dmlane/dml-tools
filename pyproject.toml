@@ -10,6 +10,7 @@ authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = "==3.12.10"
+packages = ["tools"]
 dependencies = [
     "appdirs>=1.4.4,<2.0.0",
     "eyed3>=0.9.7,<1.0.0",
@@ -22,6 +23,8 @@ Repository = "https://github.com/dmlane/tools"
 car_podcasts = "tools.car_podcasts:main"
 
 [tool.hatch.build]
+packages = ["tools"]
+sources = ["src"]
 include = [
     "LICENSE",
     "README.md",
