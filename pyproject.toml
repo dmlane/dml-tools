@@ -19,7 +19,7 @@ dependencies = [
 Repository = "https://github.com/dmlane/dml-tools"
 
 [project.scripts]
-car_podcasts = "tools.car_podcasts:main"
+car_podcasts = "dml-tools.car_podcasts:main"
 
 [tool.hatch.build]
 include = [
