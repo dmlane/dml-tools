@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tools"
-version = "2025.7.1027"  # Managed via bumpver
+version = "2025.7.1028"  # Managed via bumpver
 description = "Set of command-line tools which need python"
 authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
 license = { text = "MIT" }
@@ -60,7 +60,7 @@ dependencies = [
     "sphinx>=8.2.3,<9.0.0",
 ]
 [tool.bumpver]
-current_version = "2025.7.1027"
+current_version = "2025.7.1028"
 version_pattern = "YYYY.MM.BUILD"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true

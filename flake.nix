@@ -13,16 +13,15 @@
         python = pkgs.python312;
 
         app = python.pkgs.buildPythonApplication {
-          pname = "tools";
-          version = "2025.7.1027";
-          src = builtins.path {
-            path = ./.;
-            name = "tools-src";
-          };
-          pyproject = true;
-          nativeBuildInputs = [ pkgs.hatch ];
-          propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
-        };
+  pname = "tools";
+  version = "2025.7.1028";
+  format = "pyproject";
+  src = ./.;
+  sourceRoot = "src";
+  nativeBuildInputs = [ pkgs.hatch ];
+  propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
+};
+
       in {
         packages.default = app;
         apps.default = flake-utils.lib.mkApp { drv = app; name = "tools"; };
