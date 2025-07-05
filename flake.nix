@@ -13,7 +13,7 @@
         python = pkgs.python312;
 
         app = python.pkgs.buildPythonApplication {
-          pname = "dml-tools";
+          pname = "tools";
           version = "2025.07.05";
           src = ./.;
           #sourceRoot = "src";
@@ -23,7 +23,7 @@
         };
       in {
         packages.default = app;
-        apps.default = flake-utils.lib.mkApp { drv = app; name = "dml-tools"; };
+        apps.default = flake-utils.lib.mkApp { drv = app; name = "tools"; };
         devShells.default = pkgs.mkShell {
           buildInputs = [ pkgs.hatch python ];
         };
