@@ -23,7 +23,6 @@ Repository = "https://github.com/dmlane/tools"
 car_podcasts = "tools.car_podcasts:main"
 
 [tool.hatch.build]
-packages = ["tools"]
 sources = ["src"]
 include = [
     "LICENSE",
