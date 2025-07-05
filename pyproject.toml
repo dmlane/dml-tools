@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tools"
-version = "2024.1.1025"  # Managed via bumpver or manually
+version = "2025.7.1027"  # Managed via bumpver
 description = "Set of command-line tools which need python"
 authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
 license = { text = "MIT" }
@@ -60,8 +60,8 @@ dependencies = [
     "sphinx>=8.2.3,<9.0.0",
 ]
 [tool.bumpver]
-current_version = "2024.1.1025"
-version_pattern = "YYYY.MM.BUILD[-PYTAGNUM]"
+current_version = "2025.7.1027"
+version_pattern = "YYYY.MM.BUILD"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
 tag = true
@@ -71,6 +71,9 @@ push = true
 "pyproject.toml" = [
     '^version = "{version}"',
     '^current_version = "{version}"',
+]
+"flake.nix" = [
+    'version = "{version}";',
 ]
 
 [tool.pytest.ini_options]

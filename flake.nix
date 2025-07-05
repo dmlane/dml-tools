@@ -14,7 +14,7 @@
 
         app = python.pkgs.buildPythonApplication {
           pname = "tools";
-          version = "2025.07.05";
+          version = "2025.7.1027";
           src = builtins.path {
             path = ./.;
             name = "tools-src";
