@@ -15,8 +15,10 @@
         app = python.pkgs.buildPythonApplication {
           pname = "tools";
           version = "2025.07.05";
-          src = ./.;
-          #sourceRoot = "src";
+          src = builtins.path {
+            path = ./.;
+            name = "tools-src";
+          };
           pyproject = true;
           nativeBuildInputs = [ pkgs.hatch ];
           propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
