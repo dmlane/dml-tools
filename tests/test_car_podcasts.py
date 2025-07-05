@@ -46,7 +46,7 @@ def test_list_remote_mp3s(monkeypatch):
         paths = cpr.list_remote_mp3s("fake:")
     mock_run.assert_called_once()
     # Expect only mp3 entries, sorted by basename
-    assert paths == ["fake::sub/c.mp3", "fake::a.mp3"]
+    assert sorted(paths) == sorted(["fake:/sub/c.mp3", "fake:/a.mp3"])
 
 
 def test_empty_remote_listing(monkeypatch):

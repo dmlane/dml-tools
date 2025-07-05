@@ -1,4 +1,4 @@
-""" common routines"""
+"""common routines"""
 
 from ..common.config import read_config
 from ..common.constants import Ansi

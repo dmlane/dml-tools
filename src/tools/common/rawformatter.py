@@ -1,4 +1,4 @@
-""" Help formatter for argparse"""
+"""Help formatter for argparse"""
 
 import argparse
 import textwrap

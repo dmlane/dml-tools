@@ -24,9 +24,7 @@ CONFIG = os.path.join(CONFIG_DIR, "tools.ini")
 class EnvInterpolation(BasicInterpolation):  # pylint: disable=too-few-public-methods
     """Interpolation which expands environment variables in values."""
 
-    def before_get(
-        self, parser, section, option, value, defaults
-    ):  # pylint: disable=too-many-arguments
+    def before_get(self, parser, section, option, value, defaults):  # pylint: disable=too-many-arguments
         """Expand environment variables in values"""
         value = super().before_get(parser, section, option, value, defaults)
 

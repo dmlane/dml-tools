@@ -134,3 +134,6 @@ dmypy.json
 .DS_Store
 # Work files
 .make_files/
+# Hatch environment
+.hatch/
+/result

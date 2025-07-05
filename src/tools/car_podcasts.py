@@ -30,7 +30,10 @@ def list_remote_mp3s(remote: str) -> List[str]:
 
     try:
         result = subprocess.run(
-            ["rclone", "lsjson", remote, "--recursive"], check=True, capture_output=True, text=True
+            ["rclone", "lsjson", remote, "--recursive"],
+            check=True,
+            capture_output=True,
+            text=True,
         )
     except subprocess.CalledProcessError as e:
         print(f"{Ansi.RED}ERROR listing remote '{remote}':{Ansi.CLEAR_EOL}")
@@ -75,6 +78,10 @@ class CarPodcasts:
 
     def __init__(self) -> None:
         """Initialize CarPodcasts with default values."""
+        self.quarantine = None
+        self.dest = None
+        self.remote = None
+        self.parser = None
         self.parser: argparse.ArgumentParser
         self.verbose = False
         self.hours = -1
@@ -87,7 +94,7 @@ class CarPodcasts:
         """Set up the command-line argument parser."""
         p = argparse.ArgumentParser(
             formatter_class=RawFormatter,
-            description=("Fetch a batch of files from remote storage into the target dir."),
+            description="Fetch a batch of files from remote storage into the target dir.",
         )
         p.add_argument(
             "-V",
@@ -98,7 +105,11 @@ class CarPodcasts:
         )
         p.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
         p.add_argument(
-            "-H", "--hours-per-batch", type=int, default=-1, help="Hours of podcasts to fetch"
+            "-H",
+            "--hours-per-batch",
+            type=int,
+            default=-1,
+            help="Hours of podcasts to fetch",
         )
         p.add_argument(
             "-n",
@@ -154,7 +165,9 @@ class CarPodcasts:
         # Copy down for real
         try:
             subprocess.run(
-                ["rclone", "copyto", remote_path, temp], check=True, capture_output=not self.verbose
+                ["rclone", "copyto", remote_path, temp],
+                check=True,
+                capture_output=not self.verbose,
             )
         except subprocess.CalledProcessError as e:
             print(f"{Ansi.RED}Failed to download {disp}:{Ansi.CLEAR_EOL}")

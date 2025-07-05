@@ -1,61 +1,64 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "dml-tools"
-version = "2024.1.1025"		# Published version is managed BY bumper
+version = "2024.1.1025"  # Managed via bumpver or manually
 description = "Set of command-line tools which need python"
-authors = ["Dave Lane <cheery.koala5370@fastmail.com>"]
-license = "MIT"
+authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
+license = { text = "MIT" }
 readme = "README.md"
-repository = "https://github.com/dmlane/dml-tools"
-include = [
-   { path = 'LICENSE', format = 'sdist' },
-   { path = 'README.md', format = 'sdist' },
-   { path = 'docs', format = 'sdist' },
-   { path = 'tests', format = 'sdist' },
-]
-packages = [
-   { include = "tools", from = "src" },
+requires-python = "==3.12.10"
+dependencies = [
+    "appdirs>=1.4.4,<2.0.0",
+    "eyed3>=0.9.7,<1.0.0",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<4"
-eyed3 = "^0.9.7"
-appdirs = "^1.4.4"
+[project.urls]
+Repository = "https://github.com/dmlane/dml-tools"
 
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-myst-parser = ">=0.16"
-sphinx = ">=4.0"
-sphinx-autobuild = ">=2021.0"
-sphinx-rtd-theme = ">=1.0"
-
-[tool.poetry.group.dev.dependencies]
-black = ">=23.3.0"
-bumpver = ">=2022.1120"
-isort = ">=5.12.0"
-mypy = ">=1.2.0"
-pre-commit = "^3.5.0"
-pylint = ">=2.17.2"
-pypi-simple = "^1.4.0"
-pytest = ">=7.3.1"
-pytest-resource-path = "^1.3.0"
-setuptools = "^68.2.2"
-mock = "^5.1.0"
-
-[tool.poetry.scripts]
-# Section managed with vi
+[project.scripts]
 car_podcasts = "tools.car_podcasts:main"
 
-[[tool.poetry.source]]
-name = "repositories.fury"
-url = "https://pypi.fury.io/dave-lane/"
-priority = "supplemental"
+[tool.hatch.build]
+include = [
+    "LICENSE",
+    "README.md",
+    # "docs/**/*",  # Uncomment if/when docs are added
+    "tests/**/*",
+    "src/**/*",
+]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.hatch.metadata]
+allow-direct-references = true
 
+[tool.hatch.version]
+source = "direct"  # Or use "path" if using a version file
+
+[tool.hatch.envs.dev.scripts]
+lint = "ruff check src tests && ruff format --check src tests && mypy src"
+test = "pytest"
+
+[tool.hatch.envs.dev]
+dependencies = [
+    "bumpver>=2025.1131,<2026.0.0",
+    "mock>=5.2.0,<6.0.0",
+    "mypy>=1.16.1,<2.0.0",
+    "pre-commit>=4.2.0,<5.0.0",
+    "pypi-simple>=1.6.1,<2.0.0",
+    "pytest-resource-path>=1.4.0,<2.0.0",
+    "pytest>=8.4.1,<9.0.0",
+    "ruff>=0.12.2,<1.0.0",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "myst-parser>=4.0.1,<5.0.0",
+    "sphinx-autobuild>=2024.10.3,<2025.0.0",
+    "sphinx-rtd-theme>=3.0.2,<4.0.0",
+    "sphinx>=8.2.3,<9.0.0",
+]
 [tool.bumpver]
 current_version = "2024.1.1025"
 version_pattern = "YYYY.MM.BUILD[-PYTAGNUM]"
@@ -70,13 +73,25 @@ push = true
     '^current_version = "{version}"',
 ]
 
-[tool.black]
-line_length = 100
-target-version = ['py311']
-
-[tool.isort]
-profile = "black"
-line_length = 100
-
 [tool.pytest.ini_options]
-pythonpath = "src/tools"
+pythonpath = "src"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.12"
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+strict_optional = true
+show_error_codes = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]  # Errors, Format, isort, bugbear
+# ignore = ["E501"]           # Optional: ignore line length
+fixable = ["ALL"]
+ignore = ["F401"]                    # F401 = "imported but unused"
+

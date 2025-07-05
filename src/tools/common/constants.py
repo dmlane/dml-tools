@@ -1,4 +1,4 @@
-""" Constant definitions"""
+"""Constant definitions"""
 
 
 class Ansi:  # pylint: disable=too-few-public-methods
