@@ -100,7 +100,7 @@ class CarPodcasts:
             "-V",
             "--version",
             action="version",
-            version=version("dml-tools"),
+            version=version("tools"),
             help="Print the version number",
         )
         p.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
