@@ -13,17 +13,13 @@
         python = pkgs.python312;
 
         app = python.pkgs.buildPythonApplication {
-          pname = "tools";
-          version = "2025.7.1028";
-          format = "pyproject";
-          src = builtins.path {
-            path = ./.;
-            name = "tools-src";
-          };
-          sourceRoot = "src";
-          nativeBuildInputs = [ pkgs.hatch ];
-          propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
-        };
+  pname = "tools";
+  version = "2025.7.1028";
+  format = "pyproject";
+  src = ./.;  # Simple and correct
+  nativeBuildInputs = [ pkgs.hatch ];
+  propagatedBuildInputs = with python.pkgs; [ appdirs eyed3 ];
+};
 
       in {
         packages.default = app;
