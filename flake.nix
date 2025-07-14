@@ -26,7 +26,7 @@
         {
           default = pkgs.python312Packages.buildPythonPackage {
             pname = "dml-tools";
-            version = "2024.1.1025";
+            version = "2025.7.1032";
             format = "pyproject";
 
             src = ./.;
