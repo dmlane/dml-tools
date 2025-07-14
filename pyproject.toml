@@ -69,6 +69,9 @@ push = true
     '^version = "{version}"',
     '^current_version = "{version}"',
 ]
+"flake.nix" = [
+  'version = "{version}";'
+]
 
 [tool.black]
 line_length = 100
