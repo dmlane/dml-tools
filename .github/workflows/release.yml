@@ -1,8 +1,9 @@
-name: Build and cache on GitHub release
+name: Build and cache on tag push
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*'  # Trigger for all version tags
 
 jobs:
   build:
