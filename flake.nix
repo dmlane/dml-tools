@@ -3,42 +3,62 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
-      systems = [ "x86_64-linux" "aarch64-darwin" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems
-        (system: f { pkgs = import nixpkgs { inherit system; }; system = system; });
-    in {
-      packages = forAllSystems ({ pkgs, system }: {
-        default = pkgs.python312Packages.buildPythonPackage {
-          pname = "dml-tools";
-          version = "2024.1.1025";
-          format = "pyproject";
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems =
+        f:
+        nixpkgs.lib.genAttrs systems (
+          system:
+          f {
+            pkgs = import nixpkgs { inherit system; };
+            system = system;
+          }
+        );
+    in
+    {
+      packages = forAllSystems (
+        { pkgs, system }:
+        {
+          default = pkgs.python312Packages.buildPythonPackage {
+            pname = "dml-tools";
+            version = "2024.1.1025";
+            format = "pyproject";
 
-          src = ./.;
+            src = ./.;
 
-          nativeBuildInputs = [ pkgs.poetry ];
-          propagatedBuildInputs = with pkgs.python312Packages; [
-            eyed3
-            appdirs
-          ];
+            nativeBuildInputs = [ pkgs.poetry ];
+            propagatedBuildInputs = with pkgs.python312Packages; [
+              eyed3
+              appdirs
+              poetry-core
+            ];
 
-          pythonImportsCheck = [ "tools.car_podcasts" ];
+            pythonImportsCheck = [ "tools.car_podcasts" ];
 
-          meta = {
-            description = "Set of command-line tools (dml-tools)";
-            homepage = "https://github.com/dmlane/dml-tools";
-            license = pkgs.lib.licenses.mit;
+            meta = {
+              description = "Set of command-line tools (dml-tools)";
+              homepage = "https://github.com/dmlane/dml-tools";
+              license = pkgs.lib.licenses.mit;
+            };
           };
-        };
-      });
+        }
+      );
 
-      devShells = forAllSystems ({ pkgs, ... }: {
-        default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.poetry
-            pkgs.python312
-          ];
-        };
-      });
+      devShells = forAllSystems (
+        { pkgs, ... }:
+        {
+          default = pkgs.mkShell {
+            buildInputs = [
+              pkgs.poetry
+              pkgs.python312
+            ];
+          };
+        }
+      );
     };
+}

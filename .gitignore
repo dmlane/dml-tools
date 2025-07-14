@@ -134,3 +134,4 @@ dmypy.json
 .DS_Store
 # Work files
 .make_files/
+/result
