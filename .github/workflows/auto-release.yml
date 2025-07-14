@@ -1,0 +1,11 @@
+name: Auto-release on tag push
+
+on:
+  push:
+    tags:
+      - '*'  # Trigger for any version tag
+
+jobs:
+  release:
+    uses: dmlane/github-workflows/.github/workflows/auto-release.yml@main
+
