@@ -27,7 +27,7 @@
           dmlToolsPkg =
             (pkgs.python312Packages.buildPythonPackage {
               pname = "dml-tools";
-              version = "2025.7.1038";
+              version = "2025.7.1039";
               format = "pyproject";
 
               src = ./.;
