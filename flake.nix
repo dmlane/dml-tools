@@ -23,8 +23,8 @@
     {
       packages = forAllSystems (
         { pkgs, system }:
-        {
-          default = pkgs.python312Packages.buildPythonPackage {
+        let
+          dmlToolsPkg = pkgs.python312Packages.buildPythonPackage {
             pname = "dml-tools";
             version = "2025.7.1032";
             format = "pyproject";
@@ -46,6 +46,10 @@
               license = pkgs.lib.licenses.mit;
             };
           };
+        in
+        {
+          default = dmlToolsPkg;
+          dml-tools = dmlToolsPkg;
         }
       );
 
