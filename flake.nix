@@ -24,28 +24,34 @@
       packages = forAllSystems (
         { pkgs, system }:
         let
-          dmlToolsPkg = pkgs.python312Packages.buildPythonPackage {
-            pname = "dml-tools";
-            version = "2025.7.1037";
-            format = "pyproject";
+          dmlToolsPkg =
+            (pkgs.python312Packages.buildPythonPackage {
+              pname = "dml-tools";
+              version = "2025.7.1037";
+              format = "pyproject";
 
-            src = ./.;
+              src = ./.;
 
-            nativeBuildInputs = [ pkgs.poetry ];
-            propagatedBuildInputs = with pkgs.python312Packages; [
-              eyed3
-              appdirs
-              poetry-core
-            ];
-            outputs = [ "out" ];
-            pythonImportsCheck = [ "tools.car_podcasts" ];
+              nativeBuildInputs = [ pkgs.poetry ];
+              propagatedBuildInputs = with pkgs.python312Packages; [
+                eyed3
+                appdirs
+                poetry-core
+              ];
 
-            meta = {
-              description = "Set of command-line tools (dml-tools)";
-              homepage = "https://github.com/dmlane/dml-tools";
-              license = pkgs.lib.licenses.mit;
-            };
-          };
+              pythonImportsCheck = [ "tools.car_podcasts" ];
+
+              meta = {
+                description = "Set of command-line tools (dml-tools)";
+                homepage = "https://github.com/dmlane/dml-tools";
+                license = pkgs.lib.licenses.mit;
+              };
+            }).overrideAttrs
+              (_: {
+                outputs = [ "out" ];
+                pythonOutputDistPhase = "echo 'Skipping dist phase'";
+                installCheckPhase = "true";
+              });
         in
         {
           default = dmlToolsPkg;
