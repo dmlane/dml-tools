@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dml-tools"
-version = "2025.7.1035"		# Published version is managed BY bumper
+version = "2025.7.1036"		# Published version is managed BY bumper
 description = "Set of command-line tools which need python"
 authors = ["Dave Lane <cheery.koala5370@fastmail.com>"]
 license = "MIT"
@@ -57,7 +57,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.bumpver]
-current_version = "2025.7.1035"
+current_version = "2025.7.1036"
 version_pattern = "YYYY.MM.BUILD[-PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
