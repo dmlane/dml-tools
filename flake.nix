@@ -37,7 +37,7 @@
               appdirs
               poetry-core
             ];
-
+            outputs = [ "out" ];
             pythonImportsCheck = [ "tools.car_podcasts" ];
 
             meta = {
