@@ -1,6 +1,6 @@
 [project]
 name = "dml-tools"
-version = "2025.7.1039"
+version = "2025.7.1040"
 description = "Set of command-line tools which need python"
 authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
 license = { text = "MIT" }
@@ -68,7 +68,7 @@ priority = "supplemental"
 # ───────────────────────────────
 
 [tool.bumpver]
-current_version = "2025.7.1039"
+current_version = "2025.7.1040"
 version_pattern = "YYYY.MM.BUILD[-PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -79,9 +79,6 @@ push = true
 "pyproject.toml" = [
   '^version = "{version}"',
   '^current_version = "{version}"'
-]
-"flake.nix" = [
-  'version = "{version}";'
 ]
 
 [tool.black]
