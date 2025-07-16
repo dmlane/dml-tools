@@ -1,71 +1,58 @@
 {
-  description = "Nix flake for dml-tools (Poetry CLI using Python 3.12)";
+  description = "Nix flake for dml-tools using pyproject.nix";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    pyproject-nix.url = "github:pyproject-nix/pyproject.nix";
+    pyproject-nix.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs =
-    { self, nixpkgs }:
+    {
+      self,
+      nixpkgs,
+      pyproject-nix,
+      ...
+    }:
     let
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
       ];
-      forAllSystems =
-        f:
-        nixpkgs.lib.genAttrs systems (
-          system:
-          f {
-            pkgs = import nixpkgs { inherit system; };
-            system = system;
-          }
-        );
+      forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
       packages = forAllSystems (
-        { pkgs, system }:
+        system:
         let
-          dmlToolsPkg =
-            (pkgs.python312Packages.buildPythonPackage {
-              pname = "dml-tools";
-              version = "2025.7.1039";
-              format = "pyproject";
-
-              src = ./.;
-
-              nativeBuildInputs = [ pkgs.poetry ];
-              propagatedBuildInputs = with pkgs.python312Packages; [
-                eyed3
-                appdirs
-                poetry-core
-              ];
-
-              pythonImportsCheck = [ "tools.car_podcasts" ];
-
-              meta = {
-                description = "Set of command-line tools (dml-tools)";
-                homepage = "https://github.com/dmlane/dml-tools";
-                license = pkgs.lib.licenses.mit;
-              };
-            }).overrideAttrs
-              (_: {
-                outputs = [ "out" ];
-                pythonOutputDistPhase = "echo 'Skipping dist phase'";
-                installCheckPhase = "true";
-              });
+          pkgs = import nixpkgs { inherit system; };
+          python = pkgs.python312;
+          project = pyproject-nix.lib.project.loadPyproject {
+            projectRoot = ./.;
+          };
+          attrs = project.renderers.buildPythonPackage { inherit python; };
         in
         {
-          default = dmlToolsPkg;
-          dml-tools = dmlToolsPkg;
+          default = python.pkgs.buildPythonPackage attrs;
+          dml-tools = python.pkgs.buildPythonPackage attrs;
         }
       );
 
       devShells = forAllSystems (
-        { pkgs, ... }:
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          python = pkgs.python312;
+          project = pyproject-nix.lib.project.loadPyproject {
+            projectRoot = ./.;
+          };
+          pythonEnv = python.withPackages (project.renderers.withPackages { inherit python; });
+        in
         {
           default = pkgs.mkShell {
-            buildInputs = [
+            packages = [
+              pythonEnv
               pkgs.poetry
-              pkgs.python312
             ];
           };
         }

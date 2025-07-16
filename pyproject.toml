@@ -1,25 +1,40 @@
-[tool.poetry]
+[project]
 name = "dml-tools"
-version = "2025.7.1039"		# Published version is managed BY bumper
+version = "2025.7.1039"
 description = "Set of command-line tools which need python"
-authors = ["Dave Lane <cheery.koala5370@fastmail.com>"]
-license = "MIT"
+authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
+license = { text = "MIT" }
 readme = "README.md"
-repository = "https://github.com/dmlane/dml-tools"
-include = [
-   { path = 'LICENSE', format = 'sdist' },
-   { path = 'README.md', format = 'sdist' },
-   { path = 'docs', format = 'sdist' },
-   { path = 'tests', format = 'sdist' },
-]
-packages = [
-   { include = "tools", from = "src" },
+requires-python = ">=3.11,<4"
+dependencies = [
+  "eyed3>=0.9.7",
+  "appdirs>=1.4.4"
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<4"
-eyed3 = "^0.9.7"
-appdirs = "^1.4.4"
+[project.scripts]
+car-podcasts = "tools.car_podcasts:main"
+
+[project.urls]
+Repository = "https://github.com/dmlane/dml-tools"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# ───────────────────────────────
+# Poetry-specific configuration
+# ───────────────────────────────
+
+[tool.poetry]
+include = [
+  { path = "LICENSE", format = "sdist" },
+  { path = "README.md", format = "sdist" },
+  { path = "docs", format = "sdist" },
+  { path = "tests", format = "sdist" }
+]
+packages = [
+  { include = "tools", from = "src" }
+]
 
 [tool.poetry.group.docs]
 optional = true
@@ -43,18 +58,14 @@ pytest-resource-path = "^1.3.0"
 setuptools = "^68.2.2"
 mock = "^5.1.0"
 
-[tool.poetry.scripts]
-# Section managed with vi
-car_podcasts = "tools.car_podcasts:main"
-
 [[tool.poetry.source]]
 name = "repositories.fury"
 url = "https://pypi.fury.io/dave-lane/"
 priority = "supplemental"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+# ───────────────────────────────
+# Tooling configuration
+# ───────────────────────────────
 
 [tool.bumpver]
 current_version = "2025.7.1039"
@@ -66,8 +77,8 @@ push = true
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
-    '^version = "{version}"',
-    '^current_version = "{version}"',
+  '^version = "{version}"',
+  '^current_version = "{version}"'
 ]
 "flake.nix" = [
   'version = "{version}";'
@@ -75,7 +86,7 @@ push = true
 
 [tool.black]
 line_length = 100
-target-version = ['py311']
+target-version = ["py311"]
 
 [tool.isort]
 profile = "black"
@@ -83,3 +94,4 @@ line_length = 100
 
 [tool.pytest.ini_options]
 pythonpath = "src/tools"
+
