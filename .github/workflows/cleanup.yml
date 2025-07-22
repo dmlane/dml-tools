@@ -1,0 +1,13 @@
+name: Cleanup Old Releases
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'  # Weekly at 03:00 UTC on Sunday
+
+jobs:
+  cleanup:
+    uses: dmlane/gitHub-workflows/.github/workflows/cleanup-releases.yml@main
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
