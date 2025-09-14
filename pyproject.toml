@@ -1,6 +1,6 @@
 [project]
 name = "dml-tools"
-version = "2025.9.1"
+version = "2025.9.2"
 description = "Set of command-line tools which need python"
 authors = [{ name = "Dave Lane", email = "cheery.koala5370@fastmail.com" }]
 license = { text = "MIT" }
